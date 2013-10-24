@@ -21,3 +21,8 @@
   bottom:50px;
   position:absolute;
 }
+
+button {
+  width: 8%;
+  height: 5%;
+}
