@@ -1,6 +1,7 @@
 var interval;
+var globalGame;
 function placeImage(launcher){
-  $(launcher).append('<img class="projectile" title="3" src="firefly-closeup.jpg"></img>');
+  $(launcher).append('<img class="projectile" title="3" src="explosion.jpg"></img>');
   return $(launcher).children().last();
 }
 
@@ -12,6 +13,13 @@ function checkWin(){
   return false;
 }
 
+Game.prototype.updateTime = function()
+{
+  var currentTime = new Date().getTime();
+  globalGame.speed = globalGame.baseSpeed - ((currentTime - globalGame.startTime)/1000)*10;
+  console.log(globalGame.speed);
+};
+
 function Projectile(){
   var launcher_number = Math.floor((Math.random()*8)+1);
   this.launcher = $("#launcher"+launcher_number);
@@ -20,14 +28,17 @@ function Projectile(){
 
 Projectile.prototype.launch = function()
 {
+  var upDistance = Math.floor((Math.random()*500)+320);
+  var downDistance = upDistance - (Math.floor(Math.random()*100));
+  globalGame.updateTime();
   this.image.css('display', 'block');
   this.image.animate({
-    'top': this.launcher.position().top-420
-  }, 1500);
+    'top': this.launcher.position().top-upDistance
+  }, globalGame.speed);
   var that = this;
   this.image.animate({
-    'top': this.launcher.position().top+300
-  }, 1500, function(){
+    'top': this.launcher.position().top+downDistance
+  }, globalGame.speed, function(){
     if(that.image.attr("title") != "hit")
     {
       if(document.getElementById("lives").value > 0)
@@ -43,7 +54,9 @@ function Game() {
   this.launchpad = $("#launchpad");
   this.launchers = $(".launcher");
   this.baseSpeed = 1500;
+  this.speed = this.baseSpeed;
   this.testCounter = 0;
+  this.startTime = new Date().getTime();
 }
 
 Game.prototype.play = function()
@@ -65,19 +78,18 @@ Game.prototype.play = function()
 
 Game.prototype.startGame = function()
 {
-  console.log("In startGame. baseSpeed is :" + this.baseSpeed);
-  var interval = setInterval(this.play, this.baseSpeed);
-  console.log("Done startGame");
+  var interval = setInterval(this.play, this.speed);
 };
 
 $(function() {
   var gameStart = false;
   $("button").click(function(e){
-    if(gameStart == false)
+    if(gameStart === false)
     {
       gameStart = true;
       var game = new Game();
-      game.startGame();  
+      globalGame = game;
+      game.startGame();
     }
     else
     {
