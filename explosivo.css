@@ -1,0 +1,23 @@
+#launchpad {
+  /*display: hidden;*/
+  background-color:red;
+  position: fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:10%;
+}
+
+.launcher {
+  background-color:black;
+  width:11%;
+  height:25%;
+  position:relative;
+  display: inline-block;
+  margin-left: 1%;
+}
+
+#projectile {
+  bottom:50px;
+  position:absolute;
+}
