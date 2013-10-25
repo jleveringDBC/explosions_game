@@ -1,3 +1,8 @@
+// Setup for SoundCloud API (to enable song on play)
+
+var iframeElement   = document.querySelector('iframe');
+var widget1         = SC.Widget(iframeElement);
+
 var interval;
 var globalGame;
 function placeImage(launcher){
@@ -66,7 +71,9 @@ Game.prototype.play = function()
     window.clearInterval(interval);
     $("img").remove();
     $(".most_of_it").hide();
-    $(".win_message").html("<h1>GAME OVER MAN, GAME OVER</h1><br><br><h3>You earned " + document.getElementById("points").value + " points</h3>");
+    $("body").css("background-image", "url('man_on_fire.gif')");
+    widget1.pause();
+    $(".win_message").html("<div style='background-color:white;width:600px;'><h1>GAME OVER MAN, GAME OVER</h1><br><br><h3>You earned " + document.getElementById("points").value + " points</h3></div>");
   }
   else
   {
@@ -86,6 +93,9 @@ $(function() {
   $("button").click(function(e){
     if(gameStart === false)
     {
+      $("button").html("RELOAD");
+      widget1.setVolume(50);
+      widget1.play();
       gameStart = true;
       var game = new Game();
       globalGame = game;
